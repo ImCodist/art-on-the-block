@@ -6,9 +6,6 @@ module.exports = {
         .setDescription("Replies with Pong!"),
 
     async execute(interaction) {
-        const grenyer = 22;
-        print(grenyer);
-
         await interaction.reply("Pong!");
     },
 };
