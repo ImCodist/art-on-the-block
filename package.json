@@ -15,9 +15,14 @@
   ],
   "author": "codist",
   "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ImCodist/art-on-the-block.git"
+  },
   "dependencies": {
     "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "nope.db": "^0.0.9"
   },
   "devDependencies": {
     "eslint": "^8.31.0"

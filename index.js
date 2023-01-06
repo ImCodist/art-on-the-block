@@ -1,8 +1,16 @@
+/**
+ * index.js
+ * codist
+ *
+ * Basic discord.js bot implementation.
+ * Loads events and commands, while also registering them to discord's api.
+ * Afterwords, it runs the bot.
+ */
+
 // Requires
 const fs = require("node:fs");
 const path = require("node:path");
-
-const { Client, GatewayIntentBits, Collection, REST, Routes } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, Collection, REST, Routes } = require("discord.js");
 const dotenv = require("dotenv");
 
 // Load the .env file.
@@ -10,7 +18,19 @@ dotenv.config();
 
 // Initialize the client.
 const client = new Client({
-	intents: [GatewayIntentBits.Guilds],
+	intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers,
+
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent,
+    ],
+    partials: [
+        Partials.Channel,
+        Partials.Message,
+        Partials.Reaction,
+    ],
 });
 
 // Load events.
@@ -21,11 +41,17 @@ for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
     const event = require(filePath);
 
-    if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args));
+    // Connect each event to the client.
+    if ("name" in event && "execute" in event) {
+        if (event.once) {
+            client.once(event.name, (...args) => event.execute(...args));
+        }
+        else {
+            client.on(event.name, (...args) => event.execute(...args));
+        }
     }
     else {
-        client.on(event.name, (...args) => event.execute(...args));
+        console.log(`Event at ${filePath} missing name and/or execute property. Skipping.`);
     }
 }
 

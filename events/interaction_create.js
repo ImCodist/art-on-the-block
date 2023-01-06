@@ -1,4 +1,4 @@
-const { Events } = require("discord.js");
+const { Events, codeBlock } = require("discord.js");
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -18,11 +18,11 @@ module.exports = {
                 await command.execute(interaction);
             }
             catch (error) {
-                console.error(`Error executing ${interaction.commandName}.`);
+                console.error(`Error executing the slash command "${interaction.commandName}".`);
                 console.error(error);
 
                 await interaction.reply({
-                    content: `Something went wrong while executing this command.\n\`\`\`${error}\`\`\``,
+                    content: `Something went wrong while executing this command.\n${codeBlock(error)}`,
                     ephemeral: true,
                 });
             }

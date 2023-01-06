@@ -133,3 +133,4 @@ dist
 .pnp.*
 
 # PROJECT SPECIFIC IGNORES
+data
