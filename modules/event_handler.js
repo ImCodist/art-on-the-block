@@ -96,7 +96,7 @@ class EventHandler {
         const embed = new EmbedBuilder()
             .setColor(messages.colors.DEFAULT)
             .setTitle("🖼️ Event Finished!")
-            .setDescription(`**${event.prompt.description}***Open the attached thread to view the submissions!*`);
+            .setDescription(`**${event.prompt.description}**\n*Open the attached thread to view the submissions!*`);
 
         // Fetch the event's channel, and send the message.
         const channel = await this.client.channels.fetch(event.channelId);
