@@ -23,7 +23,7 @@ module.exports = {
         // Get the main attachment that'll show up.
         let mainAttachment = undefined;
 
-        for (const attachment of message.attachments) {
+        for (const attachment of message.attachments.values()) {
             if (attachment.contentType != null && attachment.contentType.startsWith("image") && "url" in attachment) {
                 mainAttachment = attachment;
                 break;
@@ -43,8 +43,8 @@ module.exports = {
             if (!guild.available) continue;
 
             // Check if user is a member of the guild.
-            const member = await guild.members.resolve(message.author);
-            if (!member) continue;
+            const member = await guild.members.fetch(message.author.id).catch(console.error);
+            if (member == undefined) continue;
 
             // Add the event to the valid events array.
             validEvents.push({
@@ -58,7 +58,7 @@ module.exports = {
 
         // Create a option for each of the valid events.
         const options = [];
-        for (const i of validEvents) {
+        for (const i in validEvents) {
             const eventData = validEvents[i];
 
             const optionData = {
@@ -81,6 +81,8 @@ module.exports = {
             .setTitle("📷 Select Event")
             .setDescription("Which event would you like to submit this artwork to?\n*Select from the menu below.*")
             .setColor(messages.colors.CONFIRM);
+
+        eventSelectEmbed.setImage(mainAttachment.url);
 
         // The options menu for selecting an event.
         const eventSelectRow = new ActionRowBuilder()
