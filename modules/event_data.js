@@ -64,19 +64,22 @@ class Event {
     // Gets the time the event should finish at.
     // Used for keeping a consistent schedule for repeating events.
     getFinishTime() {
+        const hour = 18;
+        const minute = 0;
+        const second = 0;
+        const millisecond = 0;
+
+        const dateNow = new Date();
         const date = new Date();
 
-        let next = 0;
-        if (date.getHours() >= 12) {
-            next = 1;
+        date.setHours(hour);
+        date.setMinutes(minute);
+        date.setSeconds(second);
+        date.setMilliseconds(millisecond);
+
+        while (date.getTime() <= dateNow.getTime()) {
+            date.setDate(date.getDate() + 1);
         }
-
-        date.setDate(date.getDate() + next);
-
-        date.setHours(12);
-        date.setMinutes(0);
-        date.setSeconds(0);
-        date.setMilliseconds(0);
 
         return date.getTime();
     }
