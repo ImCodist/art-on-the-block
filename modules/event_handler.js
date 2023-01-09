@@ -146,7 +146,7 @@ class EventHandler {
             const submissionEmbed = new EmbedBuilder()
                 .setTitle("❌ No Submissions...")
                 .setDescription("It seems like this event didn't get any submissions.\n\n*To submit to an event, simply DM me your drawing relating to the prompt.*")
-                // .setFooter( {text: `yeah i dont know what to put here without putting a insult or smth so FUCK YOU.` })
+                // .setFooter( {text: `yeah i dont know what to put here without putting a insult or smth so FUCK YOU.` }) // fuck you BACK
                 .setColor(messages.colors.ERROR);
 
             // Send the message in the thread.
@@ -198,10 +198,11 @@ class EventHandler {
 
     // Load all events in the specified directory.
     load(directory = eventDataPath) {
+        const filePath = path.join(directory, "events.json");
+
         // Make sure the file exists, if not, there is nothing to load.
         if (!fs.existsSync(filePath)) return;
 
-        const filePath = path.join(directory, "events.json");
         const dataString = fs.readFileSync(filePath, { "encoding": "utf8", "flag": "r" });
         const jsonData = JSON.parse(dataString);
 
