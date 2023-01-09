@@ -11,12 +11,16 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { EmbedBuilder, time, ThreadAutoArchiveDuration } = require("discord.js");
+const dotenv = require("dotenv");
 
 const { Event } = require("./event_data");
 const messages = require("./messages");
 
 // The path to save guild's event data at.
 const eventDataPath = "./data";
+
+// Load the .env file.
+dotenv.config();
 
 // Contains events and updates them accordingly.
 class EventHandler {
@@ -65,7 +69,16 @@ class EventHandler {
         // Fetch the channel the message will be sent in, then send it there.
         try {
             const channel = await this.client.channels.fetch(event.channelId);
-            channel.send({ embeds: [embed] });
+
+            const sendData = {
+                embeds: [embed],
+            };
+
+            if ("PING_ROLE" in process.env) {
+                sendData.content = `<@${process.env.PING_ROLE}>`;
+            }
+
+            channel.send(sendData);
         }
         catch (error) {
             console.error(error);
