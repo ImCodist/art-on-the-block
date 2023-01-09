@@ -75,7 +75,7 @@ class EventHandler {
             };
 
             if ("PING_ROLE" in process.env) {
-                sendData.content = `<@${process.env.PING_ROLE}>`;
+                sendData.content = `<@&${process.env.PING_ROLE}>`;
             }
 
             channel.send(sendData);
