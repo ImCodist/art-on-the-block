@@ -12,11 +12,13 @@ module.exports = {
         if (interaction.isChatInputCommand()) {
             const command = client.commands.get(interaction.commandName);
 
+            // If it doesn't exist show an error.
             if (!command) {
                 console.error(`No slash commmand named "${interaction.commandName}" exists.`);
                 return;
             }
 
+            // Run the command.
             try {
                 await command.execute(interaction);
             }
