@@ -131,28 +131,25 @@ class Event {
 
     // Basically sets up an event from json data.
     // Used when loading from a file.
-    loadFromData(data) {
-        for (const i in data) {
-            const eventData = data[i];
-            this.guildId = eventData.guildId;
-            this.channelId = eventData.channelId;
-            this.options = eventData.options;
-            this.finishTime = eventData.finishTime;
+    loadFromData(eventData) {
+        this.guildId = eventData.guildId;
+        this.channelId = eventData.channelId;
+        this.options = eventData.options;
+        this.finishTime = eventData.finishTime;
 
-            const promptData = eventData.prompt;
-            const prompt = new Prompt(promptData.description, promptData.authorId);
-            this.prompt = prompt;
+        const promptData = eventData.prompt;
+        const prompt = new Prompt(promptData.description, promptData.authorId);
+        this.prompt = prompt;
 
-            const submissionsData = eventData.submissions;
-            for (const [user, submissionData] of Object.entries(submissionsData)) {
-                const submission = new Submission();
-                submission.content = submissionData.content;
-                submission.attachmentURLs = submissionData.attachmentURLs;
-                submission.authorId = submissionData.authorId;
-                submission.promptDescription = submissionData.promptDescription;
+        const submissionsData = eventData.submissions;
+        for (const [user, submissionData] of Object.entries(submissionsData)) {
+            const submission = new Submission();
+            submission.content = submissionData.content;
+            submission.attachmentURLs = submissionData.attachmentURLs;
+            submission.authorId = submissionData.authorId;
+            submission.promptDescription = submissionData.promptDescription;
 
-                this.submissions[user] = submission;
-            }
+            this.submissions[user] = submission;
         }
     }
 }

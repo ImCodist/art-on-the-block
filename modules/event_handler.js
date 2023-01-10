@@ -226,12 +226,16 @@ class EventHandler {
         const dataString = fs.readFileSync(filePath, { "encoding": "utf8", "flag": "r" });
         const jsonData = JSON.parse(dataString);
 
-        // Create the event and load its data from the json.
-        const event = new Event();
-        event.loadFromData(jsonData);
+        // Create the events and load its data from the json.
+        for (const i in jsonData) {
+            const eventData = jsonData[i];
 
-        // Add the event.
-        this.addEvent(event);
+            const event = new Event();
+            event.loadFromData(eventData);
+
+            // Add the event.
+            this.addEvent(event);
+        }
     }
 }
 

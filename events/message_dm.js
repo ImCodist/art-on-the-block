@@ -81,12 +81,6 @@ module.exports = {
 
         eventSelectEmbed.setImage(mainAttachment.url);
 
-        // The embed that gets shown when timed out.
-        const timedOutEmbed = new EmbedBuilder()
-            .setTitle("⏰  Timed out.")
-            .setDescription("Took too long to respond.")
-            .setColor(messages.colors.ERROR);
-
         // The options menu for selecting an event.
         const eventSelectRow = new ActionRowBuilder()
             .addComponents(
@@ -180,6 +174,6 @@ module.exports = {
                     })
                     .catch(() => eventSelectMessage.edit({ components: [] }));
             })
-            .catch(() => eventSelectMessage.edit({ embeds: [timedOutEmbed], components: [] }));
+            .catch(() => eventSelectMessage.edit({ embeds: [messages.timedOutEmbed], components: [] }));
     },
 };
