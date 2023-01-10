@@ -59,12 +59,18 @@ class EventHandler {
         // Create the start message.
         const embed = new EmbedBuilder()
             .setColor(messages.colors.DEFAULT)
-            .setTitle("🎨 New Event!")
+            .setTitle("🎨  New Event!")
             .setDescription(`**${event.prompt.description}**`)
             .addFields(
-                { name: "End Time", value: time(Math.round(event.finishTime / 1000), "R") },
+                { name: "End Time", value: time(Math.round(event.finishTime / 1000), "R"), inline: true },
             )
             .setFooter({ text: "Send me a DM with an attachment to submit for this event!" });
+
+        if (event.prompt.authorId != undefined) {
+            embed.addFields(
+                { name: "Author", value: `<@${event.prompt.authorId}>`, inline: true },
+            );
+        }
 
         // Fetch the channel the message will be sent in, then send it there.
         try {
@@ -95,8 +101,9 @@ class EventHandler {
         // Create the finish message.
         const embed = new EmbedBuilder()
             .setColor(messages.colors.DEFAULT)
-            .setTitle("🖼️ Event Finished!")
-            .setDescription(`**${event.prompt.description}**\n*Open the attached thread to view the submissions!*`);
+            .setTitle("🖼️  Event Finished!")
+            .setDescription(`**${event.prompt.description}**`)
+            .setFooter({ text: "Open the attached thread to view the submissions!" });
 
         // Fetch the event's channel, and send the message.
         const channel = await this.client.channels.fetch(event.channelId);
@@ -129,7 +136,7 @@ class EventHandler {
 
                 // Create the message for the submission.
                 const submissionEmbed = new EmbedBuilder()
-                    .setTitle(`🖌️ ${member.user.username}'s submission.`)
+                    .setTitle(`🖌️  ${member.user.username}'s submission.`)
                     .setAuthor({ name: `${member.user.tag}`, iconURL: `${member.displayAvatarURL()}` })
                     .setColor(messages.colors.DEFAULT)
                     .setFooter({ text: `${curPromptDescription}` });
@@ -157,7 +164,7 @@ class EventHandler {
         else {
             // Create the message for no submissions.
             const submissionEmbed = new EmbedBuilder()
-                .setTitle("❌ No Submissions...")
+                .setTitle("❌  No Submissions...")
                 .setDescription("It seems like this event didn't get any submissions.\n\n*To submit to an event, simply DM me your drawing relating to the prompt.*")
                 // .setFooter( {text: `yeah i dont know what to put here without putting a insult or smth so FUCK YOU.` }) // fuck you BACK
                 .setColor(messages.colors.ERROR);

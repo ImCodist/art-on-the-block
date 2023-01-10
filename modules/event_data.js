@@ -44,6 +44,7 @@ class Submission {
 // The soul of the project essentially.
 // The Event class contains information regarding the event, like submissions and the guild.
 // Aswell as having a bunch of useful functions when dealing with events.
+// The options argument is extra stuff that is not essential for the event to run.
 class Event {
     constructor(guild, channel, prompt = undefined, options = {}) {
         this.guildId = guild;

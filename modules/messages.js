@@ -2,8 +2,8 @@
  * messages.js
  * codist
  *
- * Holds information for keeping embeds consistent.
- * I plan to add more here but for now its just colors.
+ * Holds functions I may use a lot for user interface stuff.
+ * Also holds information for keeping embeds consistent.
  */
 
 module.exports = {

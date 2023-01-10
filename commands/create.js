@@ -1,10 +1,14 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
-const { Event } = require("../modules/event_data");
+const { Event, Prompt } = require("../modules/event_data");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("start")
-        .setDescription("Start a new event in the current channel!")
+        .setName("create")
+        .setDescription("Create a new event in the current channel.")
+        .addStringOption(option => option
+            .setName("prompt")
+            .setDescription("Force a prompt to be used for this event."),
+        )
         .addBooleanOption(option => option
             .setName("repeat")
             .setDescription("Repeats the event with a new prompt once it's finished."),
@@ -15,9 +19,15 @@ module.exports = {
     async execute(interaction) {
         const client = interaction.client;
 
+        const promptString = interaction.options.getString("prompt");
         const repeat = interaction.options.getBoolean("repeat");
 
-        const event = new Event(interaction.guild.id, interaction.channel.id, undefined, {
+        let prompt = undefined;
+        if (promptString != undefined) {
+            prompt = new Prompt(promptString, interaction.user.id);
+        }
+
+        const event = new Event(interaction.guild.id, interaction.channel.id, prompt, {
             repeat: repeat,
         });
 
