@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ComponentType } = require("discord.js");
+const messages = require("../modules/messages");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -22,7 +23,9 @@ module.exports = {
         // Make sure there are events to finish.
         if (events.length <= 0) {
             const errorEmbed = new EmbedBuilder()
-                .setTitle("No events to finish.");
+                .setTitle("❌  No events to finish.")
+                .setDescription("There are no active events to finish.")
+                .setColor(messages.colors.ERROR);
 
             await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             return;
@@ -35,6 +38,7 @@ module.exports = {
 
             const optionData = {
                 label: eventData.prompt.description,
+                emoji: "📅",
                 value: `${i}`,
             };
 
@@ -52,7 +56,9 @@ module.exports = {
 
         // Send the message.
         const eventSelectEmbed = new EmbedBuilder()
-            .setTitle("Select a event");
+            .setTitle("📜  Select an event.")
+            .setDescription("Choose one of the below events to finish early.")
+            .setColor(messages.colors.DEFAULT);
 
         const message = await interaction.reply({ embeds: [eventSelectEmbed], components: [eventSelectRow], ephemeral: true });
 
@@ -68,7 +74,9 @@ module.exports = {
                 const selected = events[selectedIndex];
 
                 const confirmEmbed = new EmbedBuilder()
-                    .setTitle("forced event to finish");
+                    .setTitle("🏁  Forced the event to finish.")
+                    .setDescription(`The event **${selected.prompt.description}** has been finished early.`)
+                    .setColor(messages.colors.SUCCESS);
 
                 // Finish the event early, then send a confirmation message.
                 await eventHandler.finish(selected);

@@ -81,6 +81,12 @@ module.exports = {
 
         eventSelectEmbed.setImage(mainAttachment.url);
 
+        // The embed that gets shown when timed out.
+        const timedOutEmbed = new EmbedBuilder()
+            .setTitle("⏰  Timed out.")
+            .setDescription("Took too long to respond.")
+            .setColor(messages.colors.ERROR);
+
         // The options menu for selecting an event.
         const eventSelectRow = new ActionRowBuilder()
             .addComponents(
@@ -112,7 +118,7 @@ module.exports = {
                 // Create the embed for the artwork being confirmed.
                 const eventConfirmEmbed = eventSelectEmbed
                     .setTitle("🖼️ Submitted artwork!")
-                    .setDescription(`Submitted your art to the event **"${eventData.event.prompt.description}"**!`)
+                    .setDescription(`Submitted your art to the event **${eventData.event.prompt.description}**`)
                     .setColor(messages.colors.SUCCESS);
 
                 // Create the button for choosing to add a prompt as well.
@@ -163,17 +169,17 @@ module.exports = {
                                 // Show the user it has been submitted.
                                 const promptConfirmEmbed = new EmbedBuilder()
                                     .setTitle("📋  Submitted prompt!")
-                                    .setDescription(`Submitted your prompt **"${prompt}"** as a possible future event!`)
+                                    .setDescription(`Submitted your prompt **${prompt}** as a possible future event!`)
                                     .setColor(messages.colors.SUCCESS);
 
                                 // Uh
                                 await eventSelectInteraction.editReply({ components: [] });
                                 await modalInteraction.reply({ embeds: [promptConfirmEmbed] });
                             })
-                            .catch(err => console.error(err));
+                            .catch(() => eventSelectMessage.edit({ components: [] }));
                     })
-                    .catch(err => console.error(err));
+                    .catch(() => eventSelectMessage.edit({ components: [] }));
             })
-            .catch(err => console.error(err));
+            .catch(() => eventSelectMessage.edit({ embeds: [timedOutEmbed], components: [] }));
     },
 };
