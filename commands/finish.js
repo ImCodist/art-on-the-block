@@ -5,12 +5,18 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("finish")
         .setDescription("Force an event to finish earlier.")
+        .addBooleanOption(option => option
+            .setName("cancel-repeat")
+            .setDescription("Stops the event from repeating."),
+        )
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
         .setDMPermission(false),
 
     async execute(interaction) {
         const client = interaction.client;
         const eventHandler = client.eventHandler;
+
+        const cancelRepeat = interaction.options.getBoolean("cancel-repeat");
 
         // Get the user to select an event.
         const eventSelector = await messages.getEventSelector(interaction);
@@ -47,6 +53,10 @@ module.exports = {
                     .setTitle("🏁  Forced the event to finish.")
                     .setDescription(`The event **${selected.prompt.description}** has been finished early.`)
                     .setColor(messages.colors.SUCCESS);
+
+                if (cancelRepeat) {
+                    selected.options.repeat = false;
+                }
 
                 // Finish the event early, then send a confirmation message.
                 await eventHandler.finish(selected);
