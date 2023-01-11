@@ -65,7 +65,7 @@ module.exports = {
 
                 if (Object.keys(event.options).length > 0) {
                     let optionsMessage = "";
-                    if ("repeat" in event.options && event.options.repeat == true) optionsMessage += "✅ **REPEAT**";
+                    if (event.options.repeat == true) optionsMessage += "✅ **REPEAT**";
 
                     if (optionsMessage != "") {
                         infoEmbed.addFields(

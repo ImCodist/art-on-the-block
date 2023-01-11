@@ -175,7 +175,7 @@ class EventHandler {
 
         // If the event is to be repeated, create a new event with the old data + new prompt and start it.
         // TODO: Add the option to delay the start of the next event. Starting it instantly doesn't seem right to me.
-        if ("repeat" in event.options && event.options.repeat == true) {
+        if (event.options.repeat == true) {
             // Create a new event with similar options & a new prompt.
             const prompt = event.getNextPrompt();
             const newEvent = new Event(event.guildId, event.channelId, prompt, event.options);

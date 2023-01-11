@@ -124,8 +124,13 @@ module.exports = {
                             .setStyle(ButtonStyle.Primary),
                     );
 
+                const components = [];
+                if (eventData.event.options.repeat == true) {
+                    components.push(eventConfirmRow);
+                }
+
                 // Update the original message.
-                await eventSelectInteraction.update({ embeds: [eventConfirmEmbed], components: [eventConfirmRow] });
+                await eventSelectInteraction.update({ embeds: [eventConfirmEmbed], components: components });
 
                 // Check for a button interaction
                 eventSelectMessage.awaitMessageComponent({ filter, componentType: ComponentType.Button, time: 60000 })
