@@ -51,7 +51,7 @@ module.exports = {
 
                 const confirmEmbed = new EmbedBuilder()
                     .setTitle("🏁  Forced the event to finish.")
-                    .setDescription(`The event **${selected.prompt.description}** has been finished early.`)
+                    .setDescription(`The event **${messages.truncateString(selected.prompt.description, 100)}** has been finished early.`)
                     .setColor(messages.colors.SUCCESS);
 
                 if (cancelRepeat) {

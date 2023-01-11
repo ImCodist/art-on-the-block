@@ -59,7 +59,7 @@ module.exports = {
             const eventData = validEvents[i];
 
             const optionData = {
-                label: eventData.event.prompt.description,
+                label: messages.truncateString(eventData.event.prompt.description, 100),
                 description: eventData.guildName,
                 emoji: "📷",
                 value: `${i}`,
@@ -112,7 +112,7 @@ module.exports = {
                 // Create the embed for the artwork being confirmed.
                 const eventConfirmEmbed = eventSelectEmbed
                     .setTitle("🖼️ Submitted artwork!")
-                    .setDescription(`Submitted your art to the event **${eventData.event.prompt.description}**`)
+                    .setDescription(`Submitted your art to the event **${messages.truncateString(eventData.event.prompt.description, 100)}**`)
                     .setColor(messages.colors.SUCCESS);
 
                 // Create the button for choosing to add a prompt as well.
@@ -140,7 +140,8 @@ module.exports = {
                             .setLabel("Write a prompt for the next drawing event!")
                             .setStyle(TextInputStyle.Short)
                             .setPlaceholder("Ex. Draw yourself doing a backflip!")
-                            .setRequired(false);
+                            .setRequired(true)
+                            .setMaxLength(500);
 
                         const row = new ActionRowBuilder().addComponents(promptInput);
                         modal.addComponents(row);

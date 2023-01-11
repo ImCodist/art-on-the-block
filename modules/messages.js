@@ -25,6 +25,16 @@ const timedOutEmbed = new EmbedBuilder()
     .setDescription("Took too long to respond.")
     .setColor(colors.ERROR);
 
+// Makes a string shorter while adding ... to fit string lengths.
+const truncateString = (string, characters) => {
+    if (string.length > characters) {
+        return string.slice(0, characters - 3) + "...";
+    }
+    else {
+        return string;
+    }
+};
+
 // Useful for when the user needs to select an event.
 const getEventSelector = async (interaction) => {
     const client = interaction.client;
@@ -51,7 +61,7 @@ const getEventSelector = async (interaction) => {
         const eventData = events[i];
 
         const optionData = {
-            label: eventData.prompt.description,
+            label: truncateString(eventData.prompt.description, 100),
             emoji: "📅",
             value: `${i}`,
         };
@@ -76,5 +86,6 @@ module.exports = {
 
     timedOutEmbed: timedOutEmbed,
 
+    truncateString: truncateString,
     getEventSelector: getEventSelector,
 };

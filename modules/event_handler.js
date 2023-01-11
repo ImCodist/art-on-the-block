@@ -60,7 +60,7 @@ class EventHandler {
         const embed = new EmbedBuilder()
             .setColor(messages.colors.DEFAULT)
             .setTitle("🎨  New Event!")
-            .setDescription(`**${event.prompt.description}**`)
+            .setDescription(`**${messages.truncateString(event.prompt.description, 500)}**`)
             .addFields(
                 { name: "End Time", value: time(Math.round(event.finishTime / 1000), "R"), inline: true },
             )
@@ -102,7 +102,7 @@ class EventHandler {
         const embed = new EmbedBuilder()
             .setColor(messages.colors.DEFAULT)
             .setTitle("🖼️  Event Finished!")
-            .setDescription(`**${event.prompt.description}**`)
+            .setDescription(`**${messages.truncateString(event.prompt.description, 500)}**`)
             .setFooter({ text: "Open the attached thread to view the submissions!" });
 
         // Fetch the event's channel, and send the message.
@@ -114,7 +114,7 @@ class EventHandler {
         const curPromptDescription = event.prompt.description;
 
         const thread = await message.startThread({
-            name: `${dateNow.toDateString()} | ${curPromptDescription.substring(0, 99)}`,
+            name: `${dateNow.toDateString()} | ${messages.truncateString(curPromptDescription, 80)}`,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneDay,
             reason: `Event finished on ${dateNow.toDateString()}`,
         });

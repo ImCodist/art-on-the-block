@@ -43,12 +43,19 @@ module.exports = {
                 const event = eventHandler.events[selectedIndex];
 
                 const infoEmbed = new EmbedBuilder()
-                    .setTitle(`${event.prompt.description}`)
-                    .addFields(
-                        { name: "Finish Time", value: `<t:${event.finishTime / 1000}>`, inline: true },
-                        { name: "Submissions", value: `${Object.keys(event.submissions).length}`, inline: true },
-                    )
+                    .setTitle(`${messages.truncateString(event.prompt.description, 100)}`)
                     .setColor(messages.colors.DEFAULT);
+
+                if (event.prompt.description.length >= 100) {
+                    infoEmbed.addFields(
+                        { name: "Full Description", value: messages.truncateString(event.prompt.description, 500) },
+                    );
+                }
+
+                infoEmbed.addFields(
+                    { name: "Finish Time", value: `<t:${event.finishTime / 1000}>`, inline: true },
+                    { name: "Submissions", value: `${Object.keys(event.submissions).length}`, inline: true },
+                );
 
                 if (event.prompt.authorId != undefined) {
                     infoEmbed.addFields(

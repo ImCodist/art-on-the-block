@@ -7,7 +7,8 @@ module.exports = {
         .setDescription("Create a new event in the current channel.")
         .addStringOption(option => option
             .setName("prompt")
-            .setDescription("Force a prompt to be used for this event."),
+            .setDescription("Force a prompt to be used for this event.")
+            .setMaxLength(500),
         )
         .addBooleanOption(option => option
             .setName("repeat")
