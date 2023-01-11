@@ -52,9 +52,26 @@ module.exports = {
                     );
                 }
 
+                const submissionLength = Object.keys(event.submissions).length;
+                let submissionString = `${submissionLength}`;
+
+                if (submissionLength > 0) {
+                    submissionString += " [";
+
+                    let i = 1;
+                    for (const user of Object.keys(event.submissions)) {
+                        submissionString += `<@${user}>`;
+                        if (i < submissionLength) submissionString += ", ";
+
+                        i += 1;
+                    }
+
+                    submissionString += "]";
+                }
+
                 infoEmbed.addFields(
                     { name: "Finish Time", value: `<t:${event.finishTime / 1000}>`, inline: true },
-                    { name: "Submissions", value: `${Object.keys(event.submissions).length}`, inline: true },
+                    { name: "Submissions", value: `${submissionString}`, inline: true },
                 );
 
                 if (event.prompt.authorId != undefined) {
