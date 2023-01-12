@@ -5,20 +5,15 @@
 
 # Art On The Block
 
-A fun **Discord bot** similar to the game Gartic Phone's Icebreaker mode, but in a "question of the day" format.<br>
-It's a fun way to practice art and engage with your community!
+**Art On The Block** is a **Discord bot** made with **discord.js**. It has members of your Discord server **create artwork for a prompt** at different intervals of time, then show it off at the end. It's a fun way to practice art and engage with your community.
 
-The bot runs **events** where the participants **create artwork based on a prompt** and submit it to be shown at a defined date.
-Users may also create their own prompts to be used for the next event *(if the event repeats)*, making the prompts virtually endless!<br>
-I plan to make it *really* **customizable**, and work for any art form. *(drawings, music, heck even games if you wanted too)*
-
-This project is made with **node.js v18.12.1** with the **discord.js** library.
 
 ## Usage
 Use **/create** in the channel you'd like to start an event in to begin!<br>
 *Better setup instructions coming soon...*
 
 ## Installation
+This project is made with **node.js v18.12.1** with the **discord.js** library.
 ```
 npm install
 ```

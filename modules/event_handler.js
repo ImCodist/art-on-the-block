@@ -191,6 +191,7 @@ class EventHandler {
     addEvent(event) {
         const guildId = event.guildId;
 
+        // Check if the guild can have more events.
         let guildCount = 0;
         for (const testEvent of this.events) {
             if (testEvent.guildId == guildId) {
@@ -202,6 +203,7 @@ class EventHandler {
             return new Error("Max amount of events reached for this guild.", { code: "maxGuilds" });
         }
 
+        // Add the event.
         this.events.push(event);
         return;
     }

@@ -31,7 +31,6 @@ module.exports = {
         if (mainAttachment == undefined) return;
 
         // Find the events the user can participate in.
-        // TODO: I think this straight up doesn't work sometimes, do I know why?... I think you know the answer to that.
         const validEvents = [];
 
         for (const event of eventHandler.events) {
