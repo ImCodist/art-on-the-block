@@ -53,7 +53,9 @@ class EventHandler {
     // Adds a new event, then displays a message.
     async start(event) {
         // Add the event.
-        this.addEvent(event);
+        const addError = this.addEvent(event);
+        if (addError instanceof Error) return addError;
+
         this.save();
 
         // Create the start message.
@@ -187,7 +189,21 @@ class EventHandler {
 
     // Silently adds a new event to the handler.
     addEvent(event) {
+        const guildId = event.guildId;
+
+        let guildCount = 0;
+        for (const testEvent of this.events) {
+            if (testEvent.guildId == guildId) {
+                guildCount += 1;
+            }
+        }
+
+        if (guildCount >= this.client.config.maxGuildEvents) {
+            return new Error("Max amount of events reached for this guild.", { code: "maxGuilds" });
+        }
+
         this.events.push(event);
+        return;
     }
 
     // Silently removes an event from the handler.

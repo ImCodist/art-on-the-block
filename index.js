@@ -102,5 +102,14 @@ for (const command of client.commands.values()) {
     }
 })();
 
+// Load the config file.
+const defaultConfig = require("./assets/default_config.json");
+const config = require("./config.json");
+
+client.config = defaultConfig;
+for (const option in config) {
+    client.config[option] = config[option];
+}
+
 // Login to the client.
 client.login(process.env.TOKEN);

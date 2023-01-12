@@ -134,3 +134,4 @@ dist
 
 # PROJECT SPECIFIC IGNORES
 data
+config.json

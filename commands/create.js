@@ -32,7 +32,9 @@ module.exports = {
             repeat: repeat,
         });
 
-        await client.eventHandler.start(event);
+        const startError = await client.eventHandler.start(event);
+        if (startError instanceof Error) throw startError;
+
         await interaction.reply({ content: "Starting a new event in this channel!", ephemeral: true });
     },
 };
