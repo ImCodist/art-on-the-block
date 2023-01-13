@@ -187,6 +187,23 @@ class EventHandler {
         }
     }
 
+    async cancel(event, sendMessage = true) {
+        this.removeEvent(event);
+        this.save();
+
+        if (sendMessage) {
+            // Create the cancel message.
+            const embed = new EmbedBuilder()
+                .setColor(messages.colors.ERROR)
+                .setTitle("❌  Event Cancelled.")
+                .setDescription(`The event **${messages.truncateString(event.prompt.description, 500)}** has been cancelled.`);
+
+            // Fetch the event's channel, and send the message.
+            const channel = await this.client.channels.fetch(event.channelId);
+            await channel.send({ embeds: [embed] });
+        }
+    }
+
     // Silently adds a new event to the handler.
     addEvent(event) {
         const guildId = event.guildId;

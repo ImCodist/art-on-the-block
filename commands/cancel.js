@@ -3,11 +3,15 @@ const messages = require("../modules/messages");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("finish")
-        .setDescription("Force an event to finish earlier.")
+        .setName("cancel")
+        .setDescription("Cancel an event early.")
         .addBooleanOption(option => option
-            .setName("cancel-repeat")
-            .setDescription("Stops the event from repeating."),
+            .setName("send-message")
+            .setDescription("Send a message to notify users of the events cancelation."),
+        )
+        .addBooleanOption(option => option
+            .setName("do-repeat")
+            .setDescription("Repeat the event after being cancelled if it has the repeat option."),
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
         .setDMPermission(false),
@@ -16,14 +20,15 @@ module.exports = {
         const client = interaction.client;
         const eventHandler = client.eventHandler;
 
-        const cancelRepeat = interaction.options.getBoolean("cancel-repeat");
+        const cancelRepeat = interaction.options.getBoolean("do-repeat") ?? false;
+        const sendMessage = interaction.options.getBoolean("send-message") ?? true;
 
         // Get the user to select an event.
         const eventSelector = await messages.getEventSelector(interaction);
         if (eventSelector == undefined) {
             const errorEmbed = new EmbedBuilder()
-            .setTitle("❌  No events to finish.")
-            .setDescription("There are no active events to finish.")
+            .setTitle("❌  No events to cancel.")
+            .setDescription("There are no active events to cancel.")
             .setColor(messages.colors.ERROR);
 
             await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
@@ -33,7 +38,7 @@ module.exports = {
         // Send the message.
         const eventSelectEmbed = new EmbedBuilder()
             .setTitle("📜  Select an event.")
-            .setDescription("Choose one of the below events to finish early.")
+            .setDescription("Choose one of the below events to cancel early.")
             .setColor(messages.colors.DEFAULT);
 
         const message = await interaction.reply({ embeds: [eventSelectEmbed], components: [eventSelector], ephemeral: true });
@@ -50,8 +55,8 @@ module.exports = {
                 const selected = eventHandler.events[selectedIndex];
 
                 const confirmEmbed = new EmbedBuilder()
-                    .setTitle("🏁  Forced the event to finish.")
-                    .setDescription(`The event **${messages.truncateString(selected.prompt.description, 100)}** has been finished early.`)
+                    .setTitle("🏁  Cancelled the event early.")
+                    .setDescription(`The event **${messages.truncateString(selected.prompt.description, 100)}** has been cancelled.`)
                     .setColor(messages.colors.SUCCESS);
 
                 if (cancelRepeat) {
@@ -59,7 +64,7 @@ module.exports = {
                 }
 
                 // Finish the event early, then send a confirmation message.
-                await eventHandler.finish(selected);
+                await eventHandler.cancel(selected, sendMessage);
                 await interaction.editReply({ embeds: [confirmEmbed], components: [] });
             })
             .catch(() => interaction.editReply({ embeds: [messages.timedOutEmbed], components: [] }));
