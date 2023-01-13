@@ -20,8 +20,8 @@ module.exports = {
         const client = interaction.client;
         const eventHandler = client.eventHandler;
 
-        const cancelRepeat = interaction.options.getBoolean("do-repeat") ?? false;
         const sendMessage = interaction.options.getBoolean("send-message") ?? true;
+        const doRepeat = interaction.options.getBoolean("do-repeat") ?? false;
 
         // Get the user to select an event.
         const eventSelector = await messages.getEventSelector(interaction);
@@ -59,7 +59,7 @@ module.exports = {
                     .setDescription(`The event **${messages.truncateString(selected.prompt.description, 100)}** has been cancelled.`)
                     .setColor(messages.colors.SUCCESS);
 
-                if (cancelRepeat) {
+                if (!doRepeat) {
                     selected.options.repeat = false;
                 }
 
