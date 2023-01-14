@@ -4,7 +4,7 @@ const messages = require("../modules/messages");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("submissions")
-        .setDescription("View and manage your submissions to events.")
+        .setDescription("View and manage your submissions to this guilds events.")
         .setDMPermission(false),
 
     async execute(interaction) {

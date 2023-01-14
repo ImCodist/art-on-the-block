@@ -60,6 +60,60 @@ const createSubmissionEmbed = async (submission, user, prompt = undefined) => {
     return submissionEmbed;
 };
 
+// Creates an embed based on an events data.
+const createEventEmbed = async (event) => {
+    const infoEmbed = new EmbedBuilder()
+        .setTitle(`${truncateString(event.prompt.description, 100)}`)
+        .setColor(colors.DEFAULT);
+
+    if (event.prompt.description.length >= 100) {
+        infoEmbed.addFields(
+            { name: "Full Description", value: truncateString(event.prompt.description, 500) },
+        );
+    }
+
+    const submissionLength = Object.keys(event.submissions).length;
+    let submissionString = `${submissionLength}`;
+
+    if (submissionLength > 0) {
+        submissionString += " [";
+
+        let i = 1;
+        for (const user of Object.keys(event.submissions)) {
+            submissionString += `<@${user}>`;
+            if (i < submissionLength) submissionString += ", ";
+
+            i += 1;
+        }
+
+        submissionString += "]";
+    }
+
+    infoEmbed.addFields(
+        { name: "Finish Time", value: `<t:${event.finishTime / 1000}>`, inline: true },
+        { name: "Submissions", value: `${submissionString}`, inline: true },
+    );
+
+    if (event.prompt.authorId != undefined) {
+        infoEmbed.addFields(
+            { name: "Author", value: `<@${event.prompt.authorId}>`, inline: true },
+        );
+    }
+
+    if (Object.keys(event.options).length > 0) {
+        let optionsMessage = "";
+        if (event.options.repeat == true) optionsMessage += "✅ **REPEAT**";
+
+        if (optionsMessage != "") {
+            infoEmbed.addFields(
+                { name: "Options", value: optionsMessage, inline: false },
+            );
+        }
+    }
+
+    return infoEmbed;
+};
+
 // Useful for when the user needs to select an event.
 const getEventSelector = async (interaction) => {
     const client = interaction.client;
@@ -114,5 +168,7 @@ module.exports = {
     truncateString: truncateString,
 
     createSubmissionEmbed: createSubmissionEmbed,
+    createEventEmbed: createEventEmbed,
+
     getEventSelector: getEventSelector,
 };
