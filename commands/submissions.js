@@ -115,7 +115,7 @@ module.exports = {
 
                         // The main embed for selecting an event.
                         const removeEmbed = new EmbedBuilder()
-                            .setTitle("❌  Removed submission from event.")
+                            .setTitle("🗑️  Removed submission.")
                             .setDescription("Successfully removed your submission from the event.")
                             .setColor(messages.colors.SUCCESS);
 

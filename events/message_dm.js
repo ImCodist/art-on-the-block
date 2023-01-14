@@ -72,14 +72,6 @@ module.exports = {
         // If the user has no valid events, return.
         if (options.length <= 0) return;
 
-        // The main embed for selecting an event.
-        const eventSelectEmbed = new EmbedBuilder()
-            .setTitle("📷  Select Event")
-            .setDescription("Which event would you like to submit this artwork to?\n*Select from the menu below.*")
-            .setColor(messages.colors.CONFIRM);
-
-        eventSelectEmbed.setImage(mainAttachment.url);
-
         // The options menu for selecting an event.
         const eventSelectRow = new ActionRowBuilder()
             .addComponents(
@@ -88,6 +80,14 @@ module.exports = {
                     .setPlaceholder("Nothing Selected")
                     .addOptions(options),
             );
+
+        // The main embed for selecting an event.
+        const eventSelectEmbed = new EmbedBuilder()
+            .setTitle("📷  Select Event")
+            .setDescription("Which event would you like to submit this artwork to?\n*Select from the menu below.*")
+            .setColor(messages.colors.CONFIRM);
+
+        eventSelectEmbed.setImage(mainAttachment.url);
 
         // Send the message.
         const eventSelectMessage = await message.channel.send({ embeds: [eventSelectEmbed], components: [eventSelectRow] });
