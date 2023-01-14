@@ -35,6 +35,31 @@ const truncateString = (string, characters) => {
     }
 };
 
+// Creates an embed based on a submissions data.
+const createSubmissionEmbed = async (submission, user, prompt = undefined) => {
+    // Create the message for the submission.
+    const submissionEmbed = new EmbedBuilder()
+        .setTitle(`🖌️  ${user.username}'s submission.`)
+        .setAuthor({ name: `${user.tag}`, iconURL: `${user.displayAvatarURL()}` })
+        .setColor(colors.DEFAULT);
+
+    if (prompt != undefined) {
+        submissionEmbed.setFooter({ text: `${prompt}` });
+    }
+
+    // Set the image to the main attachment.
+    const mainAttachment = submission.attachmentURLs[0];
+    submissionEmbed.setImage(mainAttachment);
+
+    // Set the description to be the message sent with the submission.
+    if (submission.content != "") {
+        submissionEmbed.setDescription(`"${submission.content}"`);
+    }
+
+    // TODO: Also add the additional attachments to the submissions message for viewing.
+    return submissionEmbed;
+};
+
 // Useful for when the user needs to select an event.
 const getEventSelector = async (interaction) => {
     const client = interaction.client;
@@ -87,5 +112,7 @@ module.exports = {
     timedOutEmbed: timedOutEmbed,
 
     truncateString: truncateString,
+
+    createSubmissionEmbed: createSubmissionEmbed,
     getEventSelector: getEventSelector,
 };

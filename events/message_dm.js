@@ -49,9 +49,6 @@ module.exports = {
             });
         }
 
-        // If the user has no valid events, return.
-        if (validEvents.length <= 0) return;
-
         // Create a option for each of the valid events.
         const options = [];
         for (const i in validEvents) {
@@ -71,6 +68,9 @@ module.exports = {
 
             options.push(optionData);
         }
+
+        // If the user has no valid events, return.
+        if (options.length <= 0) return;
 
         // The main embed for selecting an event.
         const eventSelectEmbed = new EmbedBuilder()

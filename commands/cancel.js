@@ -27,9 +27,9 @@ module.exports = {
         const eventSelector = await messages.getEventSelector(interaction);
         if (eventSelector == undefined) {
             const errorEmbed = new EmbedBuilder()
-            .setTitle("❌  No events to cancel.")
-            .setDescription("There are no active events to cancel.")
-            .setColor(messages.colors.ERROR);
+                .setTitle("❌  No events to cancel.")
+                .setDescription("There are no active events to cancel.")
+                .setColor(messages.colors.ERROR);
 
             await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             return;

@@ -86,8 +86,13 @@ class Event {
     }
 
     // Adds a submission to the event.
-    addSubmission(submission, user) {
-        this.submissions[user] = submission;
+    addSubmission(submission, userId) {
+        this.submissions[userId] = submission;
+    }
+
+    // Removes a users submission from the event.
+    removeSubmission(userId) {
+        delete this.submissions[userId];
     }
 
     // Chooses a prompt from the submissions, if none are found it'll just use a default one.

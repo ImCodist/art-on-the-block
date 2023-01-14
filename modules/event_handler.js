@@ -136,23 +136,7 @@ class EventHandler {
                 // Save each member for later.
                 members.push(member);
 
-                // Create the message for the submission.
-                const submissionEmbed = new EmbedBuilder()
-                    .setTitle(`🖌️  ${member.user.username}'s submission.`)
-                    .setAuthor({ name: `${member.user.tag}`, iconURL: `${member.displayAvatarURL()}` })
-                    .setColor(messages.colors.DEFAULT)
-                    .setFooter({ text: `${curPromptDescription}` });
-
-                // Set the image to the main attachment.
-                const mainAttachment = submission.attachmentURLs[0];
-                submissionEmbed.setImage(mainAttachment);
-
-                // Set the description to be the message sent with the submission.
-                if (submission.content != "") {
-                    submissionEmbed.setDescription(`"${submission.content}"`);
-                }
-
-                // TODO: Also add the additional attachments to the submissions message for viewing.
+                const submissionEmbed = messages.createSubmissionEmbed(submission, member.user);
 
                 // Add each submission to the thread as a message.
                 await thread.send({ embeds: [submissionEmbed] });
