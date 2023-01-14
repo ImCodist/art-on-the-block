@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ComponentType, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ComponentType, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
 const messages = require("../modules/messages");
 
 module.exports = {
@@ -90,16 +90,51 @@ module.exports = {
                                 break;
                             }
                             case "cancelEvent": {
-                                // Cancel the event.
-                                await eventHandler.cancel(event);
+                                // Create the confirmation modal.
+                                const confirmModal = new ModalBuilder()
+                                    .setCustomId("confirmModal")
+                                    .setTitle("This will DELETE the event, are you sure?");
 
-                                // Send the confirmation message.
-                                const cancelEventEmbed = new EmbedBuilder()
-                                    .setTitle("🗑️  Cancelled the event.")
-                                    .setDescription(`Successfully cancelled the event **"${messages.truncateString(event.prompt.description, 500)}"**.`)
-                                    .setColor(messages.colors.CONFIRM);
+                                // Create the text input components
+                                const confirmNameInput = new TextInputBuilder()
+                                    .setCustomId("confirmNameInput")
+                                    .setLabel("Please enter \"YES\" to continue.")
+                                    .setStyle(TextInputStyle.Short);
 
-                                await optionSelectInteraction.update({ embeds: [cancelEventEmbed], components: [] });
+                                // Add the confirmation text input to a row and then to the modal.
+                                const firstActionRow = new ActionRowBuilder().addComponents(confirmNameInput);
+                                confirmModal.addComponents(firstActionRow);
+
+                                // Show the modal.
+                                await optionSelectInteraction.showModal(confirmModal);
+                                await interaction.editReply({ components: [] });
+
+                                // Wait for the modal to be submitted.
+                                const modalFilter = (i) => {
+                                    return i.customId === "confirmModal" && i.member.id === interaction.user.id;
+                                };
+
+                                optionSelectInteraction.awaitModalSubmit({ modalFilter, time: 60000 })
+                                    .then(async (modalInteraction) => {
+                                        const confirmText = modalInteraction.fields.getTextInputValue("confirmNameInput");
+
+                                        if (confirmText.toLowerCase() == "yes") {
+                                            // Cancel the event.
+                                            await eventHandler.cancel(event);
+
+                                            // Send the confirmation message.
+                                            const cancelEventEmbed = new EmbedBuilder()
+                                                .setTitle("🗑️  Cancelled the event.")
+                                                .setDescription(`Successfully cancelled the event **"${messages.truncateString(event.prompt.description, 500)}"**.`)
+                                                .setColor(messages.colors.CONFIRM);
+
+                                            await modalInteraction.update({ embeds: [cancelEventEmbed], components: [] });
+                                        }
+                                        else {
+                                            await modalInteraction.update({ components: [] });
+                                        }
+                                    })
+                                    .catch(() => interaction.editReply({ components: [] }));
                                 break;
                             }
                         }
