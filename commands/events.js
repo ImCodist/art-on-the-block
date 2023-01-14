@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ComponentType } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ComponentType, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const messages = require("../modules/messages");
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
         const eventSelector = await messages.getEventSelector(interaction);
         if (eventSelector == undefined) {
             const errorEmbed = new EmbedBuilder()
-                .setTitle("❌  No events in this guild.")
+                .setTitle("❌  No events found.")
                 .setDescription("There are no running events in this guild.\nCreate an event using **/create**!")
                 .setColor(messages.colors.ERROR);
 
@@ -25,26 +25,86 @@ module.exports = {
 
         // Send the message.
         const eventSelectEmbed = new EmbedBuilder()
-            .setTitle("📜  Select an event.")
-            .setDescription("Choose one of the below events in this guild.")
+            .setTitle("📃  Select an event...")
+            .setDescription("Choose one of the events from the select menu below to view / manage.")
             .setColor(messages.colors.DEFAULT);
 
         const message = await interaction.reply({ embeds: [eventSelectEmbed], components: [eventSelector], ephemeral: true });
 
         // Wait for the user to select an option.
         const filter = (i) => {
-            i.deferUpdate();
             return i.user.id === interaction.user.id;
         };
 
         message.awaitMessageComponent({ filter, componentType: ComponentType.StringSelect, time: 60000 })
             .then(async (eventSelectInteraction) => {
                 const selectedIndex = parseInt(eventSelectInteraction.values[0]);
-                const event = eventHandler.events[selectedIndex];
 
+                // Get the event & member who ran the command.
+                const event = eventHandler.events[selectedIndex];
+                const member = interaction.member;
+
+                // Create the info about the event.
                 const infoEmbed = await messages.createEventEmbed(event);
 
-                await interaction.editReply({ embeds: [infoEmbed], components: [] });
+                // Create the buttons to manage the event.
+                const components = [];
+                const optionsRow = new ActionRowBuilder();
+
+                if (member.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+                    optionsRow.addComponents(
+                        new ButtonBuilder()
+                            .setCustomId("finishEvent")
+                            .setLabel("Finish")
+                            .setStyle(ButtonStyle.Primary),
+                        new ButtonBuilder()
+                            .setCustomId("cancelEvent")
+                            .setLabel("Cancel")
+                            .setStyle(ButtonStyle.Danger),
+                    );
+                }
+
+                if (optionsRow.components.length > 0) {
+                    components.push(optionsRow);
+                }
+
+                // Update the message to show the information.
+                await eventSelectInteraction.update({ embeds: [infoEmbed], components: components });
+
+                // Wait for a button to be pressed.
+                message.awaitMessageComponent({ filter, componentType: ComponentType.Button, time: 60000 })
+                    .then(async (optionSelectInteraction) => {
+                        // Do an action based on the button pressed.
+                        switch (optionSelectInteraction.customId) {
+                            case "finishEvent": {
+                                // Finish the event.
+                                await eventHandler.finish(event);
+
+                                // Send the confirmation message.
+                                const finishEventEmbed = new EmbedBuilder()
+                                    .setTitle("🏁  Finished the event early.")
+                                    .setDescription(`Successfully finished the event **"${messages.truncateString(event.prompt.description, 500)}"** early.\n\n*If the event had the **repeat** option on, it'll repeat like normal.*`)
+                                    .setColor(messages.colors.CONFIRM);
+
+                                await optionSelectInteraction.update({ embeds: [finishEventEmbed], components: [] });
+                                break;
+                            }
+                            case "cancelEvent": {
+                                // Cancel the event.
+                                await eventHandler.cancel(event);
+
+                                // Send the confirmation message.
+                                const cancelEventEmbed = new EmbedBuilder()
+                                    .setTitle("🗑️  Cancelled the event.")
+                                    .setDescription(`Successfully cancelled the event **"${messages.truncateString(event.prompt.description, 500)}"**.`)
+                                    .setColor(messages.colors.CONFIRM);
+
+                                await optionSelectInteraction.update({ embeds: [cancelEventEmbed], components: [] });
+                                break;
+                            }
+                        }
+                    })
+                    .catch(() => interaction.editReply({ components: [] }));
             })
             .catch(() => interaction.editReply({ embeds: [messages.timedOutEmbed], components: [] }));
     },

@@ -36,12 +36,14 @@ const truncateString = (string, characters) => {
 };
 
 // Creates an embed based on a submissions data.
-const createSubmissionEmbed = async (submission, user, prompt = undefined) => {
+const createSubmissionEmbed = async (submission, member, prompt = undefined) => {
+    const user = member.user;
+
     // Create the message for the submission.
     const submissionEmbed = new EmbedBuilder()
         .setTitle(`🖌️  ${user.username}'s submission.`)
         .setAuthor({ name: `${user.tag}`, iconURL: `${user.displayAvatarURL()}` })
-        .setColor(colors.DEFAULT);
+        .setColor(`${member.displayHexColor}`);
 
     if (prompt != undefined) {
         submissionEmbed.setFooter({ text: `${prompt}` });

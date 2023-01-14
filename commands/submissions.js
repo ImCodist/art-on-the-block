@@ -74,7 +74,7 @@ module.exports = {
 
         // The main embed for selecting an event.
         const eventSelectEmbed = new EmbedBuilder()
-            .setTitle("📜  Select an event.")
+            .setTitle("📃  Select an event...")
             .setDescription("Choose an event to view your submission for.")
             .setColor(messages.colors.DEFAULT);
 
@@ -94,7 +94,7 @@ module.exports = {
                 const submission = eventData.event.submissions[interaction.user.id];
 
                 // The submissions preview embed.
-                const submissionEmbed = await messages.createSubmissionEmbed(submission, interaction.user, eventData.event.prompt);
+                const submissionEmbed = await messages.createSubmissionEmbed(submission, interaction.member, eventData.event.prompt);
                 submissionEmbed.setFooter({ text: "This is what the submission will look like when shown." });
 
                 // The buttons to manage said submission.
@@ -121,7 +121,7 @@ module.exports = {
 
                         optionSelectInteraction.update({ embeds: [removeEmbed], components: [] });
                     })
-                    .catch(() => interaction.editReply({ embeds: [messages.timedOutEmbed], components: [] }));
+                    .catch(() => interaction.editReply({ components: [] }));
             })
             .catch(() => interaction.editReply({ embeds: [messages.timedOutEmbed], components: [] }));
     },

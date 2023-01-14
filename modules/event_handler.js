@@ -136,7 +136,7 @@ class EventHandler {
                 // Save each member for later.
                 members.push(member);
 
-                const submissionEmbed = messages.createSubmissionEmbed(submission, member.user);
+                const submissionEmbed = await messages.createSubmissionEmbed(submission, member);
 
                 // Add each submission to the thread as a message.
                 await thread.send({ embeds: [submissionEmbed] });
@@ -180,7 +180,7 @@ class EventHandler {
             const embed = new EmbedBuilder()
                 .setColor(messages.colors.ERROR)
                 .setTitle("❌  Event Cancelled.")
-                .setDescription(`The event **${messages.truncateString(event.prompt.description, 500)}** has been cancelled.`);
+                .setDescription(`The event "**${messages.truncateString(event.prompt.description, 500)}**" has been cancelled.`);
 
             // Fetch the event's channel, and send the message.
             const channel = await this.client.channels.fetch(event.channelId);

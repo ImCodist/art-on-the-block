@@ -111,7 +111,7 @@ module.exports = {
                 // Create the embed for the artwork being confirmed.
                 const eventConfirmEmbed = eventSelectEmbed
                     .setTitle("🖼️ Submitted artwork!")
-                    .setDescription(`Submitted your art to the event **${messages.truncateString(eventData.event.prompt.description, 100)}**`)
+                    .setDescription(`Submitted your art to the event **"${messages.truncateString(eventData.event.prompt.description, 100)}"**.`)
                     .setColor(messages.colors.SUCCESS);
 
                 // Create the button for choosing to add a prompt as well.

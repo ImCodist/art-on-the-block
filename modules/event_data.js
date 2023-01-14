@@ -13,7 +13,7 @@ const fs = require("node:fs");
 // Only really used for the Event class.
 class Prompt {
     constructor(prompt, author = undefined) {
-        this.description = prompt;
+        this.description = prompt.trim();
         this.authorId = author;
     }
 }
