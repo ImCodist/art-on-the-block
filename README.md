@@ -1,7 +1,8 @@
-![work in progress](https://user-images.githubusercontent.com/50346006/211924593-9876d928-42fe-419b-8b73-0935742fd7dc.png)
 ![Banner](https://user-images.githubusercontent.com/50346006/211712058-226e6ece-ccc0-4713-9cb9-3d294a9a4083.png)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/ImCodist/art-on-the-block?style=flat-square)
+![Repo Status](https://img.shields.io/badge/repo%20status-WIP-yellowgreen?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/ImCodist/art-on-the-block?style=flat-square)
+
+<!-- ![GitHub release (latest by date)](https://img.shields.io/github/v/release/ImCodist/art-on-the-block?style=flat-square) -->
 
 # Art On The Block
 
