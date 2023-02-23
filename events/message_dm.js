@@ -168,7 +168,7 @@ module.exports = {
                                 // Show the user it has been submitted.
                                 const promptConfirmEmbed = new EmbedBuilder()
                                     .setTitle("📋  Submitted prompt!")
-                                    .setDescription(`Submitted your prompt **${prompt}** as a possible future event!`)
+                                    .setDescription(`Submitted your prompt **"${prompt}"** as a possible future event!`)
                                     .setColor(messages.colors.SUCCESS);
 
                                 // Uh
