@@ -22,7 +22,8 @@
   "dependencies": {
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
-    "nope.db": "^0.0.9"
+    "nope.db": "^0.0.9",
+    "undici": "^6.0.1"
   },
   "devDependencies": {
     "eslint": "^8.31.0"
